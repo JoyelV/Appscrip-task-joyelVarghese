@@ -9,15 +9,48 @@ const transformApiProduct = (item: ApiProduct): Product => ({
 
 export default async function Home() {
   const URL = "https://fakestoreapi.com/products";
-  const response = await fetch(URL, { cache: 'no-store' }); 
-  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-  const data = await response.json();
-  const initialProducts = data.map(transformApiProduct);
 
-  return (
-    <>
-      <Title />
-      <Products initialProducts={initialProducts} />
-    </>
-  );
+  try {
+    const response = await fetch(URL, {
+      cache: 'no-store',
+      headers: {
+        "User-Agent": "Mozilla/5.0",  // prevents 403 on Vercel
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      console.error("API Error:", response.status, response.statusText);
+      return (
+        <>
+          <Title />
+          <p style={{ color: "red", padding: "20px" }}>
+            Failed to load products (Error {response.status}). Please try again.
+          </p>
+        </>
+      );
+    }
+
+    const data: ApiProduct[] = await response.json();
+    const initialProducts = data.map(transformApiProduct);
+
+    return (
+      <>
+        <Title />
+        <Products initialProducts={initialProducts} />
+      </>
+    );
+
+  } catch (error) {
+    console.error("Fetch failed:", error);
+
+    return (
+      <>
+        <Title />
+        <p style={{ color: "red", padding: "20px" }}>
+          Unable to fetch products right now. Please try later.
+        </p>
+      </>
+    );
+  }
 }
