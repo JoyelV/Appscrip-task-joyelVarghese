@@ -200,15 +200,6 @@
 
 .filterToggle {
   display: flex;
-  gap: 6px;
-  cursor: pointer;
-  color: #888792;
-}
-
-/* ... existing styles ... */
-
-.filterToggle {
-  display: flex;
   gap: 12px;
   align-items: center;
 }
