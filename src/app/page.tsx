@@ -8,13 +8,13 @@ const transformApiProduct = (item: ApiProduct): Product => ({
 });
 
 export default async function Home() {
-  const URL = "https://fakestoreapi.com/products";
+  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
   try {
     const response = await fetch(URL, {
       cache: 'no-store',
       headers: {
-        "User-Agent": "Mozilla/5.0",  // prevents 403 on Vercel
+        "User-Agent": "Mozilla/5.0", 
         "Content-Type": "application/json"
       }
     });
