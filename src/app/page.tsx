@@ -5,10 +5,11 @@ import { Product, ApiProduct } from '@/shared/types/product';
 const transformApiProduct = (item: ApiProduct): Product => ({
   ...item,
   inStock: true,
+  image: item.image.replace("http://", "https://"), 
 });
 
 export default async function Home() {
-  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}/products`;
 
   try {
     const response = await fetch(URL, {
