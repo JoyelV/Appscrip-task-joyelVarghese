@@ -15,25 +15,27 @@ export default async function Home() {
     const response = await fetch(URL, {
       cache: 'no-store',
       headers: {
-        "User-Agent": "Mozilla/5.0", 
-        "Content-Type": "application/json"
+      'User-Agent': 'Mozilla/5.0 (compatible; MyApp/1.0)', 
+      'Accept': 'application/json'
       }
     });
 
-    if (!response.ok) {
-      console.error("API Error:", response.status, response.statusText);
-      return (
-        <>
-          <Title />
-          <p style={{ color: "red", padding: "20px" }}>
-            Failed to load products (Error {response.status}). Please try again.
-          </p>
-        </>
-      );
-    }
+  const text = await response.text(); 
+  if (!response.ok) {
+    console.error('API Error:', response.status, response.statusText);
+    console.error('Response body:', text);
+    return (
+      <>
+        <Title />
+        <p style={{ color: 'red', padding: '20px' }}>
+          Failed to load products (Error {response.status}). Please try again.
+        </p>
+      </>
+    );
+  }
 
-    const data: ApiProduct[] = await response.json();
-    const initialProducts = data.map(transformApiProduct);
+  const data: ApiProduct[] = JSON.parse(text);
+  const initialProducts = data.map(transformApiProduct);
 
     return (
       <>
